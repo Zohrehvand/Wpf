@@ -3,6 +3,7 @@ using Crm.DataAccess;
 using Crm.UI.Data;
 using Crm.UI.Data.Lookups;
 using Crm.UI.Data.Repositories;
+using Crm.UI.View.Services;
 using Crm.UI.ViewModel;
 using Prism.Events;
 
@@ -17,6 +18,7 @@ namespace Crm.UI.Startup
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
             builder.RegisterType<CrmDbContext>().AsSelf();
+            builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainViewModel>().AsSelf();

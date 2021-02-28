@@ -2,8 +2,9 @@
 
 namespace Crm.UI.ViewModel
 {
-  public interface ICustomerDetailViewModel
-  {
-    Task LoadAsync(int customerId);
-  }
+    public interface ICustomerDetailViewModel
+    {
+        Task LoadAsync(int customerId);
+        bool HasChanges { get; set; }
+    }
 }

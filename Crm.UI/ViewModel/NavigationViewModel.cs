@@ -33,28 +33,11 @@ namespace Crm.UI.ViewModel
             Customers.Clear();
             foreach (var item in lookup)
             {
-                Customers.Add(new NavigationItemViewModel(item.Id, item.DisplayMember));
+                Customers.Add(new NavigationItemViewModel(item.Id, item.DisplayMember,_eventAggregator));
             }
         }
 
         public ObservableCollection<NavigationItemViewModel> Customers { get; }
-
-        private NavigationItemViewModel _selectedCustomer;
-
-        public NavigationItemViewModel SelectedCustomer
-        {
-            get { return _selectedCustomer; }
-            set
-            {
-                _selectedCustomer = value;
-                OnPropertyChanged();
-                if (_selectedCustomer != null)
-                {
-                    _eventAggregator.GetEvent<OpenCustomerDetailViewEvent>()
-                      .Publish(_selectedCustomer.Id);
-                }
-            }
-        }
 
     }
 }
