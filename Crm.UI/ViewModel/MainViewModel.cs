@@ -1,8 +1,10 @@
 ﻿using Crm.UI.Event;
 using Crm.UI.View.Services;
+using Prism.Commands;
 using Prism.Events;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Crm.UI.ViewModel
 {
@@ -17,6 +19,18 @@ namespace Crm.UI.ViewModel
             _messageDialogService = messageDialogService;
             _eventAggregator.GetEvent<OpenCustomerDetailViewEvent>()
              .Subscribe(OnOpenCustomerDetailView);
+            _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Subscribe(AfterCustomerDeleted);
+            CreateNewCustomerCommand = new DelegateCommand(OnCreateNewCustomerExecute);
+        }
+
+        private void OnCreateNewCustomerExecute()
+        {
+            OnOpenCustomerDetailView(null);
+        }
+
+        private void AfterCustomerDeleted(int customerId)
+        {
+            CustomerDetailViewModel = null;
         }
 
         public async Task LoadAsync()
@@ -24,7 +38,7 @@ namespace Crm.UI.ViewModel
             await NavigationViewModel.LoadAsync();
         }
 
-        private async void OnOpenCustomerDetailView(int customerId)
+        private async void OnOpenCustomerDetailView(int? customerId)
         {
             if (CustomerDetailViewModel != null && CustomerDetailViewModel.HasChanges)
             {
@@ -34,7 +48,7 @@ namespace Crm.UI.ViewModel
             CustomerDetailViewModel = _customerDetailViewModelCreator();
             await CustomerDetailViewModel.LoadAsync(customerId);
         }
-
+        public ICommand CreateNewCustomerCommand { get; }
         public INavigationViewModel NavigationViewModel { get; }
         //public ICustomerDetailViewModel CustomerDetailViewModel { get; set; }
 

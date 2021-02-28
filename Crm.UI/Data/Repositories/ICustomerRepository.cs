@@ -8,5 +8,7 @@ namespace Crm.UI.Data.Repositories
         Task<Customer> GetByIdAsync(int customerId);
         Task SaveAsync();
         bool HasChanges();
+        void Remove(Customer model);
+        void Add(Customer customer);
     }
 }

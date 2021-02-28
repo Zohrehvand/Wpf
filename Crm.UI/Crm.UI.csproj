@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Data\Lookups\ICustomerLookupDataService.cs" />
     <Compile Include="Data\Lookups\LookupDataService.cs" />
+    <Compile Include="Event\AfterCustomerDeletedEvent.cs" />
     <Compile Include="Event\AfterCustomerSavedEvent.cs" />
     <Compile Include="Event\OpenCustomerDetailViewEvent.cs" />
     <Compile Include="Startup\Bootstrapper.cs" />

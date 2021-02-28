@@ -30,5 +30,15 @@ namespace Crm.UI.Data.Repositories
         {
             return _context.ChangeTracker.HasChanges();
         }
+
+        public void Remove(Customer model)
+        {
+            _context.Customers.Remove(model);
+        }
+
+        public void Add(Customer customer)
+        {
+            _context.Customers.Add(customer);
+        }
     }
 }

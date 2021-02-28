@@ -1,9 +1,11 @@
-﻿using Crm.UI.Data;
+﻿using Crm.Model;
+using Crm.UI.Data;
 using Crm.UI.Data.Repositories;
 using Crm.UI.Event;
 using Crm.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -23,16 +25,25 @@ namespace Crm.UI.ViewModel
 
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
+            DeleteCommand = new DelegateCommand(OnDeleteExecute);
         }
 
-        public async Task LoadAsync(int customerId)
+        private async void OnDeleteExecute()
         {
-            var customer = await _repository.GetByIdAsync(customerId);
+            _repository.Remove(Customer.Model);
+            await _repository.SaveAsync();
+            _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
+        }
+
+        public async Task LoadAsync(int? customerId)
+        {
+            var customer = customerId.HasValue ?
+                await _repository.GetByIdAsync(customerId.Value) : CreateNewCustomer();
 
             Customer = new CustomerWrapper(customer);
             Customer.PropertyChanged += (s, e) =>
               {
-                  if(!HasChanges)
+                  if (!HasChanges)
                   {
                       HasChanges = _repository.HasChanges();
                   }
@@ -42,6 +53,13 @@ namespace Crm.UI.ViewModel
                   }
               };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+        }
+
+        private Model.Customer CreateNewCustomer()
+        {
+            var customer = new Customer();
+            _repository.Add(customer);
+            return customer;
         }
 
         public CustomerWrapper Customer
@@ -61,7 +79,7 @@ namespace Crm.UI.ViewModel
             get { return _hasChanges; }
             set
             {
-                if(_hasChanges != value)
+                if (_hasChanges != value)
                 {
                     _hasChanges = value;
                     OnPropertyChanged();
@@ -72,6 +90,7 @@ namespace Crm.UI.ViewModel
 
 
         public ICommand SaveCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         private async void OnSaveExecute()
         {
