@@ -1,0 +1,6 @@
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.Model\bin\Debug\FriendOrganizer.Model.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.Model\bin\Debug\FriendOrganizer.Model.pdb
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.Model\obj\Debug\FriendOrganizer.Model.csprojAssemblyReference.cache
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.Model\obj\Debug\FriendOrganizer.Model.csproj.CoreCompileInputs.cache
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.Model\obj\Debug\FriendOrganizer.Model.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.Model\obj\Debug\FriendOrganizer.Model.pdb

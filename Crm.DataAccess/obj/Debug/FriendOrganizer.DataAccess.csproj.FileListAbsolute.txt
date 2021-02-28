@@ -1,0 +1,16 @@
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\FriendOrganizer.DataAccess.dll.config
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\FriendOrganizer.DataAccess.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\FriendOrganizer.DataAccess.pdb
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\EntityFramework.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\EntityFramework.SqlServer.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\FriendOrganizer.Model.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\FriendOrganizer.Model.pdb
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\EntityFramework.xml
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\bin\Debug\EntityFramework.SqlServer.xml
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.csprojAssemblyReference.cache
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.Migrations.InitialDatabase.resources
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.csproj.GenerateResource.cache
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.csproj.CoreCompileInputs.cache
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.csproj.CopyComplete
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.dll
+C:\Projects\Learning\Wpf\wpf-mvvm-entity-framework-app\09\demos\after\FriendOrganizer.DataAccess\obj\Debug\FriendOrganizer.DataAccess.pdb
