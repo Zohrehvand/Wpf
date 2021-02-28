@@ -18,7 +18,7 @@ namespace Crm.UI.Data.Repositories
         }
         public async Task<Customer> GetByIdAsync(int customerId)
         {
-            return await _context.Customers.AsNoTracking().SingleAsync(f => f.Id == customerId);
+            return await _context.Customers.SingleAsync(f => f.Id == customerId);
         }
 
         public async Task SaveAsync()
