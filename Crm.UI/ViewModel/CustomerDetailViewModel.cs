@@ -1,12 +1,10 @@
 ﻿using Crm.Model;
-using Crm.UI.Data;
 using Crm.UI.Data.Repositories;
 using Crm.UI.Event;
 using Crm.UI.View.Services;
 using Crm.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,6 +16,34 @@ namespace Crm.UI.ViewModel
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _messgageDialogService;
         private CustomerWrapper _customer;
+        private bool _hasChanges;
+
+
+        public ICommand SaveCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public CustomerWrapper Customer
+        {
+            get { return _customer; }
+            private set
+            {
+                _customer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool HasChanges
+        {
+            get { return _hasChanges; }
+            set
+            {
+                if (_hasChanges != value)
+                {
+                    _hasChanges = value;
+                    OnPropertyChanged();
+                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+                }
+            }
+        }
 
         public CustomerDetailViewModel(ICustomerRepository repository,
           IEventAggregator eventAggregator,
@@ -29,17 +55,6 @@ namespace Crm.UI.ViewModel
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
-        }
-
-        private async void OnDeleteExecute()
-        {
-            var result = _messgageDialogService.ShowOkCancelDialog($"Do you really want to delete {Customer.Name}", "Question");
-            if(result == MessageDialogResult.Ok)
-            {
-                _repository.Remove(Customer.Model);
-                await _repository.SaveAsync();
-                _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
-            }
         }
 
         public async Task LoadAsync(int? customerId)
@@ -62,42 +77,12 @@ namespace Crm.UI.ViewModel
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
-        private Model.Customer CreateNewCustomer()
+        private Customer CreateNewCustomer()
         {
             var customer = new Customer();
             _repository.Add(customer);
             return customer;
         }
-
-        public CustomerWrapper Customer
-        {
-            get { return _customer; }
-            private set
-            {
-                _customer = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _hasChanges;
-
-        public bool HasChanges
-        {
-            get { return _hasChanges; }
-            set
-            {
-                if (_hasChanges != value)
-                {
-                    _hasChanges = value;
-                    OnPropertyChanged();
-                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-
-        public ICommand SaveCommand { get; }
-        public ICommand DeleteCommand { get; }
 
         private async void OnSaveExecute()
         {
@@ -114,6 +99,17 @@ namespace Crm.UI.ViewModel
         private bool OnSaveCanExecute()
         {
             return Customer != null && !Customer.HasErrors && HasChanges;
+        }
+
+        private async void OnDeleteExecute()
+        {
+            var result = _messgageDialogService.ShowOkCancelDialog($"Do you really want to delete {Customer.Name}", "Question");
+            if (result == MessageDialogResult.Ok)
+            {
+                _repository.Remove(Customer.Model);
+                await _repository.SaveAsync();
+                _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
+            }
         }
     }
 }

@@ -10,6 +10,24 @@ namespace Crm.UI.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
+        private Func<ICustomerDetailViewModel> _customerDetailViewModelCreator;
+        private IEventAggregator _eventAggregator;
+        private IMessageDialogService _messageDialogService;
+        private ICustomerDetailViewModel _customerDetailViewModel;
+
+        public ICommand CreateNewCustomerCommand { get; }
+        public INavigationViewModel NavigationViewModel { get; }
+
+        public ICustomerDetailViewModel CustomerDetailViewModel
+        {
+            get { return _customerDetailViewModel; }
+            set
+            {
+                _customerDetailViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainViewModel(INavigationViewModel navigationViewModel,
           Func<ICustomerDetailViewModel> customerDetailViewModelCreator, IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
         {
@@ -21,16 +39,6 @@ namespace Crm.UI.ViewModel
              .Subscribe(OnOpenCustomerDetailView);
             _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Subscribe(AfterCustomerDeleted);
             CreateNewCustomerCommand = new DelegateCommand(OnCreateNewCustomerExecute);
-        }
-
-        private void OnCreateNewCustomerExecute()
-        {
-            OnOpenCustomerDetailView(null);
-        }
-
-        private void AfterCustomerDeleted(int customerId)
-        {
-            CustomerDetailViewModel = null;
         }
 
         public async Task LoadAsync()
@@ -48,25 +56,15 @@ namespace Crm.UI.ViewModel
             CustomerDetailViewModel = _customerDetailViewModelCreator();
             await CustomerDetailViewModel.LoadAsync(customerId);
         }
-        public ICommand CreateNewCustomerCommand { get; }
-        public INavigationViewModel NavigationViewModel { get; }
-        //public ICustomerDetailViewModel CustomerDetailViewModel { get; set; }
 
-        private ICustomerDetailViewModel _customerDetailViewModel;
-
-        public ICustomerDetailViewModel CustomerDetailViewModel
+        private void OnCreateNewCustomerExecute()
         {
-            get { return _customerDetailViewModel; }
-            set
-            {
-                _customerDetailViewModel = value;
-                OnPropertyChanged();
-            }
+            OnOpenCustomerDetailView(null);
         }
 
-        private Func<ICustomerDetailViewModel> _customerDetailViewModelCreator;
-
-        private IEventAggregator _eventAggregator;
-        private IMessageDialogService _messageDialogService;
+        private void AfterCustomerDeleted(int customerId)
+        {
+            CustomerDetailViewModel = null;
+        }
     }
 }

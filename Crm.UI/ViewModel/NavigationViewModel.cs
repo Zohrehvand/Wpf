@@ -1,7 +1,6 @@
 ﻿using Crm.UI.Data.Lookups;
 using Crm.UI.Event;
 using Prism.Events;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +12,8 @@ namespace Crm.UI.ViewModel
         private ICustomerLookupDataService _customerLookupService;
         private IEventAggregator _eventAggregator;
 
+        public ObservableCollection<NavigationItemViewModel> Customers { get; }
+
         public NavigationViewModel(ICustomerLookupDataService customerLookupService,
           IEventAggregator eventAggregator)
         {
@@ -21,6 +22,16 @@ namespace Crm.UI.ViewModel
             Customers = new ObservableCollection<NavigationItemViewModel>();
             _eventAggregator.GetEvent<AfterCustomerSavedEvent>().Subscribe(AfterCustomerSaved);
             _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Subscribe(AfterCustomerDeleted);
+        }
+
+        public async Task LoadAsync()
+        {
+            var lookup = await _customerLookupService.GetCustomerLookupAsync();
+            Customers.Clear();
+            foreach (var item in lookup)
+            {
+                Customers.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, _eventAggregator));
+            }
         }
 
         private void AfterCustomerDeleted(int customerId)
@@ -41,18 +52,5 @@ namespace Crm.UI.ViewModel
                 lookupItem.DisplayMember = obj.DisplayMember;
             }
         }
-
-        public async Task LoadAsync()
-        {
-            var lookup = await _customerLookupService.GetCustomerLookupAsync();
-            Customers.Clear();
-            foreach (var item in lookup)
-            {
-                Customers.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, _eventAggregator));
-            }
-        }
-
-        public ObservableCollection<NavigationItemViewModel> Customers { get; }
-
     }
 }

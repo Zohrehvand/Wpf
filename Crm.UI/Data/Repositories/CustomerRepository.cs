@@ -1,7 +1,5 @@
 ﻿using Crm.DataAccess;
 using Crm.Model;
-using Crm.UI.Data;
-using System;
 using System.Data.Entity;
 using System.Threading.Tasks;
 
@@ -16,6 +14,7 @@ namespace Crm.UI.Data.Repositories
         {
             _context = context;
         }
+
         public async Task<Customer> GetByIdAsync(int customerId)
         {
             return await _context.Customers.SingleAsync(f => f.Id == customerId);

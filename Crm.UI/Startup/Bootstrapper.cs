@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Crm.DataAccess;
-using Crm.UI.Data;
 using Crm.UI.Data.Lookups;
 using Crm.UI.Data.Repositories;
 using Crm.UI.View.Services;
@@ -16,15 +15,12 @@ namespace Crm.UI.Startup
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
-
             builder.RegisterType<CrmDbContext>().AsSelf();
             builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
-
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<CustomerDetailViewModel>().As<ICustomerDetailViewModel>();
-
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();
             builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
 

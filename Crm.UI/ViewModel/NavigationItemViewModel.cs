@@ -1,7 +1,6 @@
 ﻿using Crm.UI.Event;
 using Prism.Commands;
 using Prism.Events;
-using System;
 using System.Windows.Input;
 
 namespace Crm.UI.ViewModel
@@ -9,6 +8,10 @@ namespace Crm.UI.ViewModel
     public class NavigationItemViewModel : ViewModelBase
     {
         private string _displayMember;
+        private IEventAggregator _eventAggregator;
+
+        public ICommand OpenCustomerDetailViewCommand { get; }
+        public int Id { get; }
 
         public NavigationItemViewModel(int id, string displayMember, IEventAggregator eventAggregator)
         {
@@ -17,14 +20,6 @@ namespace Crm.UI.ViewModel
             _eventAggregator = eventAggregator;
             OpenCustomerDetailViewCommand = new DelegateCommand(OnOpenCustomerDetailView);
         }
-
-        private void OnOpenCustomerDetailView()
-        {
-            _eventAggregator.GetEvent<OpenCustomerDetailViewEvent>()
-                      .Publish(Id);
-        }
-
-        public int Id { get; }
 
         public string DisplayMember
         {
@@ -36,8 +31,9 @@ namespace Crm.UI.ViewModel
             }
         }
 
-        private IEventAggregator _eventAggregator;
-
-        public ICommand OpenCustomerDetailViewCommand { get; }
+        private void OnOpenCustomerDetailView()
+        {
+            _eventAggregator.GetEvent<OpenCustomerDetailViewEvent>().Publish(Id);
+        }
     }
 }

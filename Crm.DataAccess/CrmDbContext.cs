@@ -6,10 +6,7 @@ namespace Crm.DataAccess
 {
     public class CrmDbContext : DbContext
     {
-        public CrmDbContext() : base("CrmDb")
-        {
-
-        }
+        public CrmDbContext() : base("CrmDb") { }
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerType> CustomerTypes { get; set; }
