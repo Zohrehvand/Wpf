@@ -49,9 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrmDbContext.cs" />
-    <Compile Include="Migrations\202102271817528_InitialDatabase.cs" />
-    <Compile Include="Migrations\202102271817528_InitialDatabase.Designer.cs">
-      <DependentUpon>202102271817528_InitialDatabase.cs</DependentUpon>
+    <Compile Include="Migrations\202103011534212_initial.cs" />
+    <Compile Include="Migrations\202103011534212_initial.Designer.cs">
+      <DependentUpon>202103011534212_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,8 +69,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202102271817528_InitialDatabase.resx">
-      <DependentUpon>202102271817528_InitialDatabase.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202103011534212_initial.resx">
+      <DependentUpon>202103011534212_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

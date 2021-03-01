@@ -2,6 +2,7 @@
 using Crm.UI.Data;
 using Crm.UI.Data.Repositories;
 using Crm.UI.Event;
+using Crm.UI.View.Services;
 using Crm.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
@@ -15,14 +16,16 @@ namespace Crm.UI.ViewModel
     {
         private ICustomerRepository _repository;
         private IEventAggregator _eventAggregator;
+        private IMessageDialogService _messgageDialogService;
         private CustomerWrapper _customer;
 
         public CustomerDetailViewModel(ICustomerRepository repository,
-          IEventAggregator eventAggregator)
+          IEventAggregator eventAggregator,
+          IMessageDialogService messageDialogService)
         {
             _repository = repository;
             _eventAggregator = eventAggregator;
-
+            _messgageDialogService = messageDialogService;
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
@@ -30,9 +33,13 @@ namespace Crm.UI.ViewModel
 
         private async void OnDeleteExecute()
         {
-            _repository.Remove(Customer.Model);
-            await _repository.SaveAsync();
-            _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
+            var result = _messgageDialogService.ShowOkCancelDialog($"Do you really want to delete {Customer.Name}", "Question");
+            if(result == MessageDialogResult.Ok)
+            {
+                _repository.Remove(Customer.Model);
+                await _repository.SaveAsync();
+                _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
+            }
         }
 
         public async Task LoadAsync(int? customerId)
