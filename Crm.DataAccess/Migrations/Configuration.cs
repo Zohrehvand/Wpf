@@ -13,7 +13,7 @@ namespace Crm.DataAccess.Migrations
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Crm.DataAccess.CrmDbContext context)
+        protected override void Seed(CrmDbContext context)
         {
             context.Customers.AddOrUpdate(
               p => p.Name,
