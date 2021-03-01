@@ -1,10 +1,12 @@
 ﻿using Crm.Model;
+using Crm.UI.Data.Lookups;
 using Crm.UI.Data.Repositories;
 using Crm.UI.Event;
 using Crm.UI.View.Services;
 using Crm.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -15,12 +17,15 @@ namespace Crm.UI.ViewModel
         private ICustomerRepository _repository;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _messgageDialogService;
+        private ICustomerTypeLookupDataService _customerTypeLookupDataService;
         private CustomerWrapper _customer;
         private bool _hasChanges;
 
 
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ObservableCollection<LookupItem> CustomerTypes { get; }
+
         public CustomerWrapper Customer
         {
             get { return _customer; }
@@ -47,14 +52,17 @@ namespace Crm.UI.ViewModel
 
         public CustomerDetailViewModel(ICustomerRepository repository,
           IEventAggregator eventAggregator,
-          IMessageDialogService messageDialogService)
+          IMessageDialogService messageDialogService,
+          ICustomerTypeLookupDataService customerTypeLookupDataService)
         {
             _repository = repository;
             _eventAggregator = eventAggregator;
             _messgageDialogService = messageDialogService;
+            _customerTypeLookupDataService = customerTypeLookupDataService;
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
+            CustomerTypes = new ObservableCollection<LookupItem>();
         }
 
         public async Task LoadAsync(int? customerId)
@@ -62,19 +70,37 @@ namespace Crm.UI.ViewModel
             var customer = customerId.HasValue ?
                 await _repository.GetByIdAsync(customerId.Value) : CreateNewCustomer();
 
+            InitializeCustomer(customer);
+            await LoadCustomerTypeLookup();
+        }
+
+        private void InitializeCustomer(Customer customer)
+        {
             Customer = new CustomerWrapper(customer);
             Customer.PropertyChanged += (s, e) =>
-              {
-                  if (!HasChanges)
-                  {
-                      HasChanges = _repository.HasChanges();
-                  }
-                  if (e.PropertyName == nameof(Customer.HasErrors))
-                  {
-                      ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-                  }
-              };
+            {
+                if (!HasChanges)
+                {
+                    HasChanges = _repository.HasChanges();
+                }
+                if (e.PropertyName == nameof(Customer.HasErrors))
+                {
+                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+                }
+            };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+        }
+
+        private async Task LoadCustomerTypeLookup()
+        {
+            CustomerTypes.Clear();
+            CustomerTypes.Add(new NullLookupItem { DisplayMember = "[Not Selected]" });
+
+            var lookup = await _customerTypeLookupDataService.GetCustomerTypeLookupAsync();
+            foreach (var lookupItem in lookup)
+            {
+                CustomerTypes.Add(lookupItem);
+            }
         }
 
         private Customer CreateNewCustomer()

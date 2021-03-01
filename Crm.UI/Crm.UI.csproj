@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\Lookups\ICustomerLookupDataService.cs" />
+    <Compile Include="Data\Lookups\ICustomerTypeLookupDataService.cs" />
     <Compile Include="Data\Lookups\LookupDataService.cs" />
     <Compile Include="Event\AfterCustomerDeletedEvent.cs" />
     <Compile Include="Event\AfterCustomerSavedEvent.cs" />

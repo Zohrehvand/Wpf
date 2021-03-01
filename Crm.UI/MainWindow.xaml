@@ -7,7 +7,7 @@
         xmlns:view="clr-namespace:Crm.UI.View"
         xmlns:viewModel="clr-namespace:Crm.UI.ViewModel"
         mc:Ignorable="d"
-        Title="Customers List" Height="400" Width="600" FontSize="15">
+        Title="Customers List" Height="500" Width="700" FontSize="15">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:CustomerDetailViewModel }">
             <view:CustomerDetailView/>
@@ -23,7 +23,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Menu Grid.ColumnSpan="2" FontSize="20">
-            <MenuItem Header="Create">
+            <MenuItem Header="Create" Padding="20 5">
                 <MenuItem Header="New Customer" Command="{Binding CreateNewCustomerCommand}"/>
             </MenuItem>
         </Menu>
