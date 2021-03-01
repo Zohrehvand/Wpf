@@ -30,7 +30,6 @@ namespace Crm.DataAccess.Migrations
               new CustomerType { Name = "Mechanic" },
               new CustomerType { Name = "Worker" }
             );
-
         }
     }
 }
