@@ -1,6 +1,8 @@
 # Recap Wpf
-Review my Wpf Knowledge
+NOTE: Purpose of the app is a knowledge WPF recap.
 
+Project Description: 
+This Sample Application is a WPF basic application to List, Add, Edit, Remove an Entity (Customer Entity) using MVVM pattern and Prism.Core library as an Event Aggregator.
 
 Project Specifications:
 
