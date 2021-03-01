@@ -14,10 +14,10 @@ namespace Crm.DataAccess.Migrations
         {
             context.Customers.AddOrUpdate(
               f => f.Name,
-              new Customer { Name = "Volvo", Code = "800321" },
-              new Customer { Name = "EWork", Code = "600231" },
-              new Customer { Name = "2MNordic", Code = "400596" },
-              new Customer { Name = "Adfenix", Code = "986000" }
+              new Customer { Name = "Aseman", Code = "800321" },
+              new Customer { Name = "Sohrab", Code = "600231" },
+              new Customer { Name = "Simorgh", Code = "400596" },
+              new Customer { Name = "Ghoghnous", Code = "986000" }
               );
         }
     }
