@@ -1,9 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crm.Model
 {
     public class Customer
     {
+        public Customer()
+        {
+            CustomerContacts = new Collection<CustomerContact>();
+        }
         public int Id { get; set; }
 
         [Required]
@@ -19,5 +25,6 @@ namespace Crm.Model
 
         public int? CustomerTypeId { get; set; }
         public CustomerType CustomerType { get; set; }
+        public ICollection<CustomerContact> CustomerContacts { get; set; }
     }
 }

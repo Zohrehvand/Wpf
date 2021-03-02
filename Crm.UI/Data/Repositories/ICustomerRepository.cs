@@ -10,5 +10,6 @@ namespace Crm.UI.Data.Repositories
         bool HasChanges();
         void Remove(Customer model);
         void Add(Customer customer);
+        void RemovePhoneNumber(CustomerContact model);
     }
 }

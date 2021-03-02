@@ -6,7 +6,11 @@ using Crm.UI.View.Services;
 using Crm.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -19,12 +23,16 @@ namespace Crm.UI.ViewModel
         private IMessageDialogService _messgageDialogService;
         private ICustomerTypeLookupDataService _customerTypeLookupDataService;
         private CustomerWrapper _customer;
+        private CustomerContactWrapper _selectedContact;
         private bool _hasChanges;
-
 
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand AddContactCommand { get; }
+        public ICommand RemoveContactCommand { get; }
+
         public ObservableCollection<LookupItem> CustomerTypes { get; }
+        public ObservableCollection<CustomerContactWrapper> Contacts { get; }
 
         public CustomerWrapper Customer
         {
@@ -33,6 +41,17 @@ namespace Crm.UI.ViewModel
             {
                 _customer = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public CustomerContactWrapper SelectedContact
+        {
+            get { return _selectedContact; }
+            set
+            {
+                _selectedContact = value;
+                OnPropertyChanged();
+                ((DelegateCommand)RemoveContactCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -62,8 +81,14 @@ namespace Crm.UI.ViewModel
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
+            AddContactCommand = new DelegateCommand(OnAddContactExecute);
+            RemoveContactCommand = new DelegateCommand(OnRemoveContactExecute, OnRemoveContactCanExecute);
+
             CustomerTypes = new ObservableCollection<LookupItem>();
+            Contacts = new ObservableCollection<CustomerContactWrapper>();
         }
+
+       
 
         public async Task LoadAsync(int? customerId)
         {
@@ -71,7 +96,35 @@ namespace Crm.UI.ViewModel
                 await _repository.GetByIdAsync(customerId.Value) : CreateNewCustomer();
 
             InitializeCustomer(customer);
+            InitializeCustomerContacts(customer.CustomerContacts);
             await LoadCustomerTypeLookup();
+        }
+
+        private void InitializeCustomerContacts(ICollection<CustomerContact> customerContacts)
+        {
+            foreach (var wrapper in Contacts)
+            {
+                wrapper.PropertyChanged -= CustomerContactWrapper_PropertyChanged;
+            }
+            Contacts.Clear();
+            foreach (var item in customerContacts)
+            {
+                var wrapper = new CustomerContactWrapper(item);
+                Contacts.Add(wrapper);
+                wrapper.PropertyChanged += CustomerContactWrapper_PropertyChanged;
+            }
+        }
+
+        private void CustomerContactWrapper_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!HasChanges)
+            {
+                HasChanges = _repository.HasChanges();
+            }
+            if (e.PropertyName == nameof(CustomerContactWrapper.HasErrors))
+            {
+                ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            }
         }
 
         private void InitializeCustomer(Customer customer)
@@ -124,7 +177,7 @@ namespace Crm.UI.ViewModel
 
         private bool OnSaveCanExecute()
         {
-            return Customer != null && !Customer.HasErrors && HasChanges;
+            return Customer != null && !Customer.HasErrors && Contacts.All(x => !x.HasErrors) && HasChanges;
         }
 
         private async void OnDeleteExecute()
@@ -136,6 +189,31 @@ namespace Crm.UI.ViewModel
                 await _repository.SaveAsync();
                 _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
             }
+        }
+
+        private bool OnRemoveContactCanExecute()
+        {
+            return SelectedContact != null;
+        }
+
+        private void OnRemoveContactExecute()
+        {
+            SelectedContact.PropertyChanged -= CustomerContactWrapper_PropertyChanged;
+            _repository.RemovePhoneNumber(SelectedContact.Model);
+            //Customer.Model.CustomerContacts.Remove(SelectedContact.Model);
+            Contacts.Remove(SelectedContact);
+            SelectedContact = null;
+            HasChanges = _repository.HasChanges();
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+        }
+
+        private void OnAddContactExecute()
+        {
+            var newContact = new CustomerContactWrapper(new CustomerContact());
+            newContact.PropertyChanged += CustomerContactWrapper_PropertyChanged;
+            Contacts.Add(newContact);
+            Customer.Model.CustomerContacts.Add(newContact.Model);
+            newContact.Number = "";
         }
     }
 }

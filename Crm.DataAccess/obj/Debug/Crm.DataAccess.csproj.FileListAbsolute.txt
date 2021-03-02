@@ -30,3 +30,4 @@ C:\Projects\Learning\Wpf\Wpf\Crm.DataAccess\obj\Debug\Crm.DataAccess.dll
 C:\Projects\Learning\Wpf\Wpf\Crm.DataAccess\obj\Debug\Crm.DataAccess.pdb
 C:\Projects\Learning\Wpf\Wpf\Crm.DataAccess\obj\Debug\Crm.DataAccess.Migrations.initial.resources
 C:\Projects\Learning\Wpf\Wpf\Crm.DataAccess\obj\Debug\Crm.DataAccess.csproj.GenerateResource.cache
+C:\Projects\Learning\Wpf\Wpf\Crm.DataAccess\obj\Debug\Crm.DataAccess.Migrations.AddCustomerContacts.resources

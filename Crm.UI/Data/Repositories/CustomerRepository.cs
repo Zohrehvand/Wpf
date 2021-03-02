@@ -17,7 +17,9 @@ namespace Crm.UI.Data.Repositories
 
         public async Task<Customer> GetByIdAsync(int customerId)
         {
-            return await _context.Customers.SingleAsync(f => f.Id == customerId);
+            return await _context.Customers
+                .Include(x => x.CustomerContacts)
+                .SingleAsync(f => f.Id == customerId);
         }
 
         public async Task SaveAsync()
@@ -38,6 +40,11 @@ namespace Crm.UI.Data.Repositories
         public void Add(Customer customer)
         {
             _context.Customers.Add(customer);
+        }
+
+        public void RemovePhoneNumber(CustomerContact model)
+        {
+            _context.CustomerContacts.Remove(model);
         }
     }
 }
