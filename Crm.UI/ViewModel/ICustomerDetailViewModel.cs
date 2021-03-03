@@ -1,10 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace Crm.UI.ViewModel
+﻿namespace Crm.UI.ViewModel
 {
-    public interface ICustomerDetailViewModel
+    public interface ICustomerDetailViewModel : IDetailViewModel
     {
-        Task LoadAsync(int? customerId);
-        bool HasChanges { get; set; }
+
     }
 }

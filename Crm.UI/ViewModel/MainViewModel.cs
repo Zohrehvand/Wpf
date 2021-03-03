@@ -13,17 +13,17 @@ namespace Crm.UI.ViewModel
         private Func<ICustomerDetailViewModel> _customerDetailViewModelCreator;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _messageDialogService;
-        private ICustomerDetailViewModel _customerDetailViewModel;
+        private IDetailViewModel _detailViewModel;
 
-        public ICommand CreateNewCustomerCommand { get; }
+        public ICommand CreateNewDetailCommand { get; }
         public INavigationViewModel NavigationViewModel { get; }
 
-        public ICustomerDetailViewModel CustomerDetailViewModel
+        public IDetailViewModel DetailViewModel
         {
-            get { return _customerDetailViewModel; }
+            get { return _detailViewModel; }
             set
             {
-                _customerDetailViewModel = value;
+                _detailViewModel = value;
                 OnPropertyChanged();
             }
         }
@@ -35,10 +35,10 @@ namespace Crm.UI.ViewModel
             _customerDetailViewModelCreator = customerDetailViewModelCreator;
             _eventAggregator = eventAggregator;
             _messageDialogService = messageDialogService;
-            _eventAggregator.GetEvent<OpenCustomerDetailViewEvent>()
-             .Subscribe(OnOpenCustomerDetailView);
-            _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Subscribe(AfterCustomerDeleted);
-            CreateNewCustomerCommand = new DelegateCommand(OnCreateNewCustomerExecute);
+            _eventAggregator.GetEvent<OpenDetailViewEvent>()
+             .Subscribe(OnOpenDetailView);
+            _eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
+            CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
         }
 
         public async Task LoadAsync()
@@ -46,25 +46,31 @@ namespace Crm.UI.ViewModel
             await NavigationViewModel.LoadAsync();
         }
 
-        private async void OnOpenCustomerDetailView(int? customerId)
+        private async void OnOpenDetailView(OpenDetailViewEventArgs args)
         {
-            if (CustomerDetailViewModel != null && CustomerDetailViewModel.HasChanges)
+            if (DetailViewModel != null && DetailViewModel.HasChanges)
             {
                 var result = _messageDialogService.ShowOkCancelDialog("You've made changes. Navigate away?", "Question");
                 if (result == MessageDialogResult.Cancel) return;
             }
-            CustomerDetailViewModel = _customerDetailViewModelCreator();
-            await CustomerDetailViewModel.LoadAsync(customerId);
+            switch (args.ViewModelName)
+            {
+                case nameof(CustomerDetailViewModel):
+                    DetailViewModel = _customerDetailViewModelCreator();
+                    break;
+            }
+            DetailViewModel = _customerDetailViewModelCreator();
+            await DetailViewModel.LoadAsync(args.Id);
         }
 
-        private void OnCreateNewCustomerExecute()
+        private void OnCreateNewDetailExecute(Type viewModelType)
         {
-            OnOpenCustomerDetailView(null);
+            OnOpenDetailView(new OpenDetailViewEventArgs { ViewModelName = viewModelType.Name });
         }
 
-        private void AfterCustomerDeleted(int customerId)
+        private void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
         {
-            CustomerDetailViewModel = null;
+            DetailViewModel = null;
         }
     }
 }

@@ -16,18 +16,15 @@ using System.Windows.Input;
 
 namespace Crm.UI.ViewModel
 {
-    public class CustomerDetailViewModel : ViewModelBase, ICustomerDetailViewModel
+    public class CustomerDetailViewModel : DetailViewModelBase, ICustomerDetailViewModel
     {
         private ICustomerRepository _repository;
-        private IEventAggregator _eventAggregator;
         private IMessageDialogService _messgageDialogService;
         private ICustomerTypeLookupDataService _customerTypeLookupDataService;
         private CustomerWrapper _customer;
         private CustomerContactWrapper _selectedContact;
         private bool _hasChanges;
 
-        public ICommand SaveCommand { get; }
-        public ICommand DeleteCommand { get; }
         public ICommand AddContactCommand { get; }
         public ICommand RemoveContactCommand { get; }
 
@@ -55,32 +52,15 @@ namespace Crm.UI.ViewModel
             }
         }
 
-        public bool HasChanges
-        {
-            get { return _hasChanges; }
-            set
-            {
-                if (_hasChanges != value)
-                {
-                    _hasChanges = value;
-                    OnPropertyChanged();
-                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-                }
-            }
-        }
-
         public CustomerDetailViewModel(ICustomerRepository repository,
           IEventAggregator eventAggregator,
           IMessageDialogService messageDialogService,
-          ICustomerTypeLookupDataService customerTypeLookupDataService)
+          ICustomerTypeLookupDataService customerTypeLookupDataService) : base(eventAggregator)
         {
             _repository = repository;
-            _eventAggregator = eventAggregator;
             _messgageDialogService = messageDialogService;
             _customerTypeLookupDataService = customerTypeLookupDataService;
 
-            SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
-            DeleteCommand = new DelegateCommand(OnDeleteExecute);
             AddContactCommand = new DelegateCommand(OnAddContactExecute);
             RemoveContactCommand = new DelegateCommand(OnRemoveContactExecute, OnRemoveContactCanExecute);
 
@@ -88,9 +68,9 @@ namespace Crm.UI.ViewModel
             Contacts = new ObservableCollection<CustomerContactWrapper>();
         }
 
-       
 
-        public async Task LoadAsync(int? customerId)
+
+        public override async Task LoadAsync(int? customerId)
         {
             var customer = customerId.HasValue ?
                 await _repository.GetByIdAsync(customerId.Value) : CreateNewCustomer();
@@ -163,31 +143,26 @@ namespace Crm.UI.ViewModel
             return customer;
         }
 
-        private async void OnSaveExecute()
+        protected override async void OnSaveExecute()
         {
             await _repository.SaveAsync();
             HasChanges = _repository.HasChanges();
-            _eventAggregator.GetEvent<AfterCustomerSavedEvent>().Publish(
-              new AfterCustomerSavedEventArgs
-              {
-                  Id = Customer.Id,
-                  DisplayMember = $"{Customer.Name} - {Customer.Code}"
-              });
+            RaiseDetailSavedEvent(Customer.Id, $"{Customer.Name} - {Customer.Code}");
         }
 
-        private bool OnSaveCanExecute()
+        protected override bool OnSaveCanExecute()
         {
             return Customer != null && !Customer.HasErrors && Contacts.All(x => !x.HasErrors) && HasChanges;
         }
 
-        private async void OnDeleteExecute()
+        protected override async void OnDeleteExecute()
         {
             var result = _messgageDialogService.ShowOkCancelDialog($"Do you really want to delete {Customer.Name}", "Question");
             if (result == MessageDialogResult.Ok)
             {
                 _repository.Remove(Customer.Model);
                 await _repository.SaveAsync();
-                _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Publish(Customer.Id);
+                RaiseDetailDeletedEvent(Customer.Id);
             }
         }
 

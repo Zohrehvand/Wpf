@@ -20,8 +20,8 @@ namespace Crm.UI.ViewModel
             _customerLookupService = customerLookupService;
             _eventAggregator = eventAggregator;
             Customers = new ObservableCollection<NavigationItemViewModel>();
-            _eventAggregator.GetEvent<AfterCustomerSavedEvent>().Subscribe(AfterCustomerSaved);
-            _eventAggregator.GetEvent<AfterCustomerDeletedEvent>().Subscribe(AfterCustomerDeleted);
+            _eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
+            _eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
         }
 
         public async Task LoadAsync()
@@ -30,26 +30,36 @@ namespace Crm.UI.ViewModel
             Customers.Clear();
             foreach (var item in lookup)
             {
-                Customers.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, _eventAggregator));
+                Customers.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, nameof(CustomerDetailViewModel), _eventAggregator));
             }
         }
 
-        private void AfterCustomerDeleted(int customerId)
+        private void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
         {
-            var customer = Customers.SingleOrDefault(x => x.Id == customerId);
-            if (customer != null) Customers.Remove(customer);
+            switch (args.ViewModelName)
+            {
+                case nameof(CustomerDetailViewModel):
+                    var customer = Customers.SingleOrDefault(x => x.Id == args.Id);
+                    if (customer != null) Customers.Remove(customer);
+                    break;
+            }
         }
 
-        private void AfterCustomerSaved(AfterCustomerSavedEventArgs obj)
+        private void AfterDetailSaved(AfterDetailSavedEventArgs args)
         {
-            var lookupItem = Customers.SingleOrDefault(l => l.Id == obj.Id);
-            if (lookupItem == null)
+            switch (args.ViewModelName)
             {
-                Customers.Add(new NavigationItemViewModel(obj.Id, obj.DisplayMember, _eventAggregator));
-            }
-            else
-            {
-                lookupItem.DisplayMember = obj.DisplayMember;
+                case nameof(CustomerDetailViewModel):
+                    var lookupItem = Customers.SingleOrDefault(l => l.Id == args.Id);
+                    if (lookupItem == null)
+                    {
+                        Customers.Add(new NavigationItemViewModel(args.Id, args.DisplayMember, nameof(CustomerDetailViewModel), _eventAggregator));
+                    }
+                    else
+                    {
+                        lookupItem.DisplayMember = args.DisplayMember;
+                    }
+                    break;
             }
         }
     }

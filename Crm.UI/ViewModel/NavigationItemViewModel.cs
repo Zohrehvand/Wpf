@@ -9,16 +9,17 @@ namespace Crm.UI.ViewModel
     {
         private string _displayMember;
         private IEventAggregator _eventAggregator;
-
-        public ICommand OpenCustomerDetailViewCommand { get; }
+        private string _detailViewModelName;
+        public ICommand OpenDetailViewCommand { get; }
         public int Id { get; }
 
-        public NavigationItemViewModel(int id, string displayMember, IEventAggregator eventAggregator)
+        public NavigationItemViewModel(int id, string displayMember,string detailViewModelName, IEventAggregator eventAggregator)
         {
             Id = id;
             DisplayMember = displayMember;
+            _detailViewModelName = detailViewModelName;
             _eventAggregator = eventAggregator;
-            OpenCustomerDetailViewCommand = new DelegateCommand(OnOpenCustomerDetailView);
+            OpenDetailViewCommand = new DelegateCommand(OnOpenDetailViewExecute);
         }
 
         public string DisplayMember
@@ -31,9 +32,14 @@ namespace Crm.UI.ViewModel
             }
         }
 
-        private void OnOpenCustomerDetailView()
+        private void OnOpenDetailViewExecute()
         {
-            _eventAggregator.GetEvent<OpenCustomerDetailViewEvent>().Publish(Id);
+            var args = new OpenDetailViewEventArgs
+            {
+                Id = Id,
+                ViewModelName = _detailViewModelName
+            };
+            _eventAggregator.GetEvent<OpenDetailViewEvent>().Publish(args);
         }
     }
 }

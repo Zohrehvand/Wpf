@@ -1,15 +1,9 @@
 ﻿using Crm.Model;
-using System.Threading.Tasks;
 
 namespace Crm.UI.Data.Repositories
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        Task<Customer> GetByIdAsync(int customerId);
-        Task SaveAsync();
-        bool HasChanges();
-        void Remove(Customer model);
-        void Add(Customer customer);
         void RemovePhoneNumber(CustomerContact model);
     }
 }

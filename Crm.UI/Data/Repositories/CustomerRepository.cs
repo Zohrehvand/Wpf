@@ -5,46 +5,23 @@ using System.Threading.Tasks;
 
 namespace Crm.UI.Data.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
-    {
-        //private Func<CrmDbContext> _contextCreator;
-        private CrmDbContext _context { get; set; }
 
-        public CustomerRepository(CrmDbContext context)
+    public class CustomerRepository : Repository<Customer, CrmDbContext>, ICustomerRepository
+    {
+        public CustomerRepository(CrmDbContext context) : base(context)
         {
-            _context = context;
         }
 
-        public async Task<Customer> GetByIdAsync(int customerId)
+        public override async Task<Customer> GetByIdAsync(int customerId)
         {
-            return await _context.Customers
+            return await Context.Customers
                 .Include(x => x.CustomerContacts)
                 .SingleAsync(f => f.Id == customerId);
         }
 
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        public bool HasChanges()
-        {
-            return _context.ChangeTracker.HasChanges();
-        }
-
-        public void Remove(Customer model)
-        {
-            _context.Customers.Remove(model);
-        }
-
-        public void Add(Customer customer)
-        {
-            _context.Customers.Add(customer);
-        }
-
         public void RemovePhoneNumber(CustomerContact model)
         {
-            _context.CustomerContacts.Remove(model);
+            Context.CustomerContacts.Remove(model);
         }
     }
 }
