@@ -57,6 +57,10 @@
     <Compile Include="Migrations\202103021653284_AddCustomerContacts.Designer.cs">
       <DependentUpon>202103021653284_AddCustomerContacts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202103050825031_AddedCampaign.cs" />
+    <Compile Include="Migrations\202103050825031_AddedCampaign.Designer.cs">
+      <DependentUpon>202103050825031_AddedCampaign.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -78,6 +82,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103021653284_AddCustomerContacts.resx">
       <DependentUpon>202103021653284_AddCustomerContacts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103050825031_AddedCampaign.resx">
+      <DependentUpon>202103050825031_AddedCampaign.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

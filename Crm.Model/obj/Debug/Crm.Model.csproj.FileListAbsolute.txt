@@ -5,7 +5,6 @@ C:\Projects\Learning\Wpf\CustomerManager\FriendOrganizer.Model\obj\Debug\Crm.Mod
 C:\Projects\Learning\Wpf\CustomerManager\FriendOrganizer.Model\obj\Debug\Crm.Model.pdb
 C:\Projects\Learning\Wpf\Wpf\Crm.Model\bin\Debug\Crm.Model.dll
 C:\Projects\Learning\Wpf\Wpf\Crm.Model\bin\Debug\Crm.Model.pdb
-C:\Projects\Learning\Wpf\Wpf\Crm.Model\obj\Debug\Crm.Model.csprojAssemblyReference.cache
 C:\Projects\Learning\Wpf\Wpf\Crm.Model\obj\Debug\Crm.Model.csproj.CoreCompileInputs.cache
 C:\Projects\Learning\Wpf\Wpf\Crm.Model\obj\Debug\Crm.Model.dll
 C:\Projects\Learning\Wpf\Wpf\Crm.Model\obj\Debug\Crm.Model.pdb

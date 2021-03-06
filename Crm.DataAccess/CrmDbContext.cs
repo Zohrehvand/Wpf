@@ -11,6 +11,7 @@ namespace Crm.DataAccess
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerType> CustomerTypes { get; set; }
         public DbSet<CustomerContact> CustomerContacts { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

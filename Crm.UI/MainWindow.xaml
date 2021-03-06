@@ -13,6 +13,9 @@
         <DataTemplate DataType="{x:Type viewModel:CustomerDetailViewModel }">
             <view:CustomerDetailView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CampaignDetailViewModel }">
+            <view:CampaignDetailView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -27,6 +30,8 @@
             <MenuItem Header="Create" Padding="20 5">
                 <MenuItem Header="New Customer" Command="{Binding CreateNewDetailCommand}"
                           CommandParameter="{x:Type viewModel:CustomerDetailViewModel}"/>
+                <MenuItem Header="New Campaign" Command="{Binding CreateNewDetailCommand}"
+                          CommandParameter="{x:Type viewModel:CampaignDetailViewModel}"/>
             </MenuItem>
         </Menu>
         <view:NavigationView Grid.Row="1" DataContext="{Binding NavigationViewModel}"/>

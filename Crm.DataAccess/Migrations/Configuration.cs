@@ -13,26 +13,26 @@ namespace Crm.DataAccess.Migrations
 
         protected override void Seed(CrmDbContext context)
         {
-            context.Customers.AddOrUpdate(
-              p => p.Name,
-              new Customer
-              {
-                  Name = "Andrew Peters",
-                  Code = "800236",
-                  Email = "Andrew.Peters@gmail.com",
-                  CustomerType = new CustomerType
-                  {
-                      Name = "Student"
-                  },
-                  CustomerContacts = new Collection<CustomerContact>()
-                  {
+            var customer = new Customer[]
+            {
+                new Customer
+                {
+                    Name = "Andrew Peters",
+                    Code = "800236",
+                    Email = "Andrew.Peters@gmail.com",
+                    CustomerType = new CustomerType
+                    {
+                        Name = "Student"
+                    },
+                    CustomerContacts = new Collection<CustomerContact>()
+                    {
                       new CustomerContact { Number = "+46720185426"},
                       new CustomerContact { Number = "+46720185427"},
                       new CustomerContact { Number = "+46720185428"},
-                  }
-              },
-              new Customer
-              {
+                    }
+                },
+                new Customer
+                {
                   Name = "Brice Lambson",
                   Code = "800325",
                   Email = "Brice.Lambson@gmail.com",
@@ -46,9 +46,9 @@ namespace Crm.DataAccess.Migrations
                       new CustomerContact { Number = "+46720185327"},
                       new CustomerContact { Number = "+46720185328"},
                   }
-              },
-              new Customer
-              {
+                },
+                new Customer
+                {
                   Name = "Rowan Miller",
                   Code = "800369",
                   Email = "Rowan.Miller@gamil.com",
@@ -62,9 +62,9 @@ namespace Crm.DataAccess.Migrations
                       new CustomerContact { Number = "+46720187427"},
                       new CustomerContact { Number = "+46720187428"},
                   }
-              },
-              new Customer
-              {
+                },
+                new Customer
+                {
                   Name = "Rick Morgan",
                   Code = "800145",
                   Email = "Rick.Morgan@gmail.com",
@@ -78,8 +78,20 @@ namespace Crm.DataAccess.Migrations
                       new CustomerContact { Number = "+46720135427"},
                       new CustomerContact { Number = "+46720135428"},
                   }
-              }
-            );
+                }
+            };
+            context.Customers.AddOrUpdate(p => p.Name, customer);
+
+            context.Campaigns.AddOrUpdate(
+                p => p.Title,
+                new Campaign
+                {
+                    Title = "Sale",
+                    DateFrom = new System.DateTime(2021, 01, 01),
+                    DateTo = new System.DateTime(2021, 12, 29),
+                    Customers = customer
+                }
+           );
         }
     }
 }

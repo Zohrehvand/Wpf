@@ -9,6 +9,7 @@ namespace Crm.Model
         public Customer()
         {
             CustomerContacts = new Collection<CustomerContact>();
+            Campaigns = new Collection<Campaign>();
         }
         public int Id { get; set; }
 
@@ -26,5 +27,7 @@ namespace Crm.Model
         public int? CustomerTypeId { get; set; }
         public CustomerType CustomerType { get; set; }
         public ICollection<CustomerContact> CustomerContacts { get; set; }
+
+        public ICollection<Campaign> Campaigns { get; set; }
     }
 }

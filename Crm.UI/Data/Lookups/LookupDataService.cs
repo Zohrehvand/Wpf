@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Crm.UI.Data.Lookups
 {
-    public class LookupDataService : ICustomerLookupDataService, ICustomerTypeLookupDataService
+    public class LookupDataService : ICustomerLookupDataService,
+        ICustomerTypeLookupDataService, ICampaignLookupDataService
     {
         private Func<CrmDbContext> _contextCreator;
 
@@ -44,6 +45,22 @@ namespace Crm.UI.Data.Lookups
                       DisplayMember = f.Name
                   })
                   .ToListAsync();
+            }
+        }
+
+        public async Task<List<LookupItem>> GetMeetingLookupAsync()
+        {
+            using (var ctx = _contextCreator())
+            {
+                var items = await ctx.Campaigns.AsNoTracking()
+                    .Select(m =>
+                    new LookupItem
+                    {
+                        Id = m.Id,
+                        DisplayMember = m.Title
+                    })
+                    .ToListAsync();
+                return items;
             }
         }
     }

@@ -15,14 +15,21 @@ namespace Crm.UI.Startup
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
+
             builder.RegisterType<CrmDbContext>().AsSelf();
+
             builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
+
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
-            builder.RegisterType<CustomerDetailViewModel>().As<ICustomerDetailViewModel>();
+            builder.RegisterType<CustomerDetailViewModel>().Keyed<IDetailViewModel>(nameof(CustomerDetailViewModel));
+            builder.RegisterType<CampaignDetailViewModel>().Keyed<IDetailViewModel>(nameof(CampaignDetailViewModel));
+
+
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();
             builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
+            builder.RegisterType<CampaignRepository>().As<ICampaignRepository>();
 
             return builder.Build();
         }
